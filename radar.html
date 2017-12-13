@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Insert title here</title>
+</head>
+
+<link rel="stylesheet" type="text/css" title="Design" href="css/radar.css"/>
+
+<link rel="stylesheet" type="text/css" title="Design" href="./jsExt/jquery/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" title="Design" href="./jsExt/jquery/jquery.splitter.css"/>
+<link rel="stylesheet" href="./jsExt/jsTree/themes/default/style.min.css"/>
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>
+
+<script src="./jsExt/jquery/jquery.min.js"></script>
+<script src="./jsExt/jquery/jquery-ui.min.js"></script>
+
+
+<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+
+
+<script src="./js/common.js"></script>
+<script src="./js/devisuProxy.js"></script>
+
+<script src="./jsExt/jquery/jquery.splitter.js"></script>
+<script src="./jsExt/d3/d3.js"></script>
+
+<script src="./jsExt/raphael.js"></script>
+<script src="./jsExt/others/KolorWheel.js"></script>
+<script src="./jsExt/jsTree/jstree.min.js"></script>
+
+
+<script src="js/d3radar.js"></script>
+<script src="js/radarController.js"></script>
+<script src="js/radarBackground.js"></script>
+<script src="js/radarXml2.js"></script>
+
+<script src="js/radarRoles.js"></script>
+<script src="js/useCases.js"></script>
+
+<script src="js/treeController.js"></script>
+<script src="js/visibility.js"></script>
+<script src="js/params.js"></script>
+
+<script src="./js/globalVars.js"></script>
+<script src="./js/infosGenericParams.js"></script>
+
+<script src="./js/util.js"></script>
+<script src="./js/radarFilterController.js"></script>
+
+
+<script src="./js/infosGeneric.js"></script>
+<script src="js/infosTechno.js"></script>
+<script src="js/infosUseCase.js"></script>
+<script src="js/infosScenarioRadar.js"></script>
+<script src="js/infosScenarioArch.js"></script>
+<script src="js/infosTechno.js"></script>
+<script src="js/importExport.js"></script>
+<script src="./js/mongoToNeoSynchronizer.js"></script>
+<script src="./js/schema.js"></script>
+<!--<script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>-->
+
+
+<script>
+    processDataBeforeDrawingCallback = null;
+    var currentBU;
+    var radarModelName;
+    var modified = false;
+    $(function () {
+
+        $('#main').width("100%").height("100%").split({
+            orientation: 'vertical',
+            limit: 100,
+            position: "410px"
+        });
+
+        $("#tabs-radarLeft").tabs();
+        $("#radarDiv").width(860).height(560);
+
+        $("#dialogGlobal").dialog({
+            autoOpen: true,
+            height: Gparams.bigDialogSize.h,
+            width: Gparams.bigDialogSize.w,
+            appendTo: "#center",
+
+            modal: false,
+
+
+        });
+        $("#dialogGlobal").dialog("close")
+        $("#dialogGlobal").css("z-index", 300)
+        $("#dialogGlobal").css("font-size", "12px");
+
+
+        queryParams = common.getQueryParams(document.location.search);
+        radarModelName = queryParams.radarModelName;
+        $("#changeBu").css("visibility", "hidden");
+
+
+        if (radarModelName == "UseCases") {
+
+            setBuList();
+            if (!currentBU) {
+                showBuDialog();
+            }
+        }
+        else {
+
+            initRadarPage();
+        }
+
+
+    });
+    function setBuList() {
+
+        var bus = devisuProxy.getDistinct(dbName, "use_cases", {}, "bu");
+        bus.sort();
+        bus.splice(0, 0, "")
+        common.fillSelectOptionsWithStringArray(chooseBUSelect, bus);
+    }
+    function showBuDialog() {
+        //if(!queryParams.bu){
+        $("#chooseBuDiv").css("visibility", "visible")
+
+        //}
+
+
+    }
+    function hideChooseBuDiv() {
+        queryParams.bu = $("#chooseBUSelect").val();
+        currentBU = queryParams.bu;
+        initRadarPage();
+        $("#currentBu").html("Bu :" + currentBU);
+        $("#changeBu").css("visibility", "visible");
+        $("#chooseBuDiv").css("visibility", "hidden")
+
+
+    }
+
+    function onNewItemButtonClk() {
+        var name = prompt("new item name");
+        if (!name || name == "")
+            return;
+
+        radarController.displayInfos(null, name);
+
+
+    }
+
+    function initRadarPage() {
+        filterDiv = "radarFiltersDiv";
+        bcsTreeDiv = "#bcsTreeDiv";
+        radarDiv = "#radarDiv";
+        attrsIFrame = "#attrsIframe";
+        var queryParams = common.getQueryParams(document.location.search);
+        if (!queryParams.dbName)
+            dbName = "POT" + Gparams.CURRENT_YEAR;
+        dbName = queryParams.dbName;
+
+
+        if (radarModelName == "ScenariosArch") {
+            $("#newItemButton").css("visibility", "hidden")
+
+            $("#tabs-radarLeft").tabs({active: 2});
+           // $('[href="#toolsTab"]').closest('li').hide();
+            $('[href="#radarFiltersTab"]').closest('li').hide();
+            $('[href="#legendTab"]').closest('li').hide();
+
+
+            $(attrsIFrame).attr("src", "infosScenarioArch.html?dbName=" + dbName+"&userRole="+userRole+"&userLogin="+userLogin);
+            processDataBeforeDrawingCallback = function (data) {
+                // sort for z-index
+                data.sort(function (a, b) {
+                    if (a.type == "layer")
+                        return -1;
+                    return 1;
+
+                });
+                // add textColor;
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].type == "layer") {
+                        data[i].textColor = "blue";
+                        data[i].textBold = "y";
+                    }
+
+                }
+            }
+        }
+
+
+        radarController.Radar_loadRadar(Gparams.radarXmlModeParams, radarModelName, {});
+
+
+        var str = radarXmls[radarModelName].infosPage;
+        if (!str) {
+            alert("ERROR : no infoPage defined in xml config file");
+            console.error("no infoPage defined in xml config file");
+
+        } else {
+            // str += "?objectId=" + obj.id + "&dbName=" + dbName;
+            $(attrsIFrame).attr("src", str + "?dbName=" + dbName+"&userRole="+userRole+"&userLogin="+userLogin);
+        }
+
+
+        useCases.loadBCsTree();
+        $("#radarTitle").html(dbName + " / " + radarModelName)
+        //   $("#chooseBuDiv").css("left",(totalWidth/2)-150).css("top", (totalHeight/2)-150);
+    }
+</script>
+
+<style>
+
+
+</style>
+<body>
+
+
+<div id="main">
+
+    <div id="left">
+
+        <div id="left-radar">
+            <!-- &nbsp; <a href='javascript:resetEnumFilters();'>reset</a> &nbsp;
+            <div id="breadcrumbParent">
+                <span id="breadcrumb"></span>
+            </div>
+            <span>&nbsp;</span>-->
+            <span id="radarTitle"></span>
+            &nbsp; <span id="currentBu"></span>
+            &nbsp;
+            <button id="changeBu" onclick="showBuDialog()">change</button>
+
+            <div id="stateDisplay"></div>
+            <div id="tabs-radarLeft">
+                <ul>
+                    <li><a href="#legendTab">Legend</a></li>
+                    <li><a href="#radarFiltersTab">Filters</a></li>
+                    <li><a href="#attrsTab">Data</a></li>
+                    <li><a href="#toolsTab">Tools</a></li>
+                </ul>
+                <div id="legendTab">
+                    <div id="legend"></div>
+                </div>
+                <div id="attrsTab">
+                    <button id="newItemButton" onclick="onNewItemButtonClk()">New</button>
+                    <span id="attrsTabMessage"></span>
+                    <iframe id="attrsIframe"></iframe>
+
+                </div>
+
+                <div id="radarFiltersTab">
+                    <!-- <div id="radarFiltersDiv"></div>-->
+                    selection mode <select onchange="radarFilterController.onFilterModeSelect()" id="filterMode2">
+                    <option>only</option>
+                    <option>and</option>
+                    <option>or</option>
+                    <option>reset</option>
+                </select>
+                    <div id="radarFiltersTree"></div>
+                </div>
+
+                <div id="toolsTab">
+                    <div id="paramsDiv">
+                        <table>
+                            <tr>
+                                <!--    <td><input type="checkbox" checked="checked"
+                                               onchange="radarController.toogleShowExcluded(this)">show excluded
+                                        points
+                                    </td>-->
+                            </tr>
+
+
+                            <tr>
+                                <td>MovePoints on radar</td>
+
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <input type="radio" name="positionControlMode" checked="checked"
+                                           onchange='radarController.setPositionControMode()' value="STATIC">cannot move
+                                    points
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    <input type="radio" name="positionControlMode"
+                                           onchange='radarController.setPositionControMode()' value="CONFINED">can only
+                                    move points in their current quadrant
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <input type="radio" name="positionControlMode"
+                                           onchange='radarController.setPositionControMode()' value="CHANGE-ATTRS">
+                                    allow quadrant change (axes attributes will be modified)
+                                </td>
+                            </tr>
+
+
+
+
+                            <tr>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" onchange="radarController.toogleShowExcluded(this)">show
+                                    excluded points
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <br>
+                                    <br>&nbsp;
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button onclick="radarController.exportCsv();">Export CSV</button>
+                                    <button onclick="radarController.exportCsv('screen');">Show table</button>
+                                </td>
+                            </tr>
+
+
+
+
+                            <!--      <tr>
+                                      <td><input type="button" value="get print image"
+                                                 onclick='getPrintRadarImage();'></td>
+                                  </tr>
+                                  <tr>
+                                      <td><input type="button" value="Add item"
+                                                 onclick='addItem();'></td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <div id="radarAdmin">
+                                              <input type="button" id="initRadarRolesB" value="edit  roles"
+                                                     onclick="initRadarRoles();"> <br> <input
+                                                  type="checkbox" id="resetItemsCoordinates"
+                                                  onclick="drawRadar()">reset points position
+                                          </div>
+                                      </td>
+
+                                  </tr>
+
+
+                                  <tr>
+                                      <td>
+                                          <button onclick="generateSVG()">generateSVG</button>
+                                      </td>
+                                  </tr>-->
+
+
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div id="center">
+
+        <div id="radarDiv"></div>
+    </div>
+</div>
+<div id="dialogGlobal" title="dialog">
+    <div id="dialogGlobalContent">
+
+    </div>
+
+</div>
+<div id="chooseBuDiv">
+    select a Business Unit<br>
+    <select id="chooseBUSelect" onchange="hideChooseBuDiv()">
+    </select>
+
+</div>
+
+</body>
+</html>

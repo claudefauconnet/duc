@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" title="Design" href="./jsExt/jquery/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="./jsExt/jsTree/themes/default/style.min.css"/>
+
+    <script src="./jsExt/jquery/jquery.min.js"></script>
+    <script src="./jsExt/jquery/jquery-ui.min.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/devisuProxy.js"></script>
+    <script src="js/infosGeneric.js" charset="UTF-8"></script>
+    <script src="js/params.js"></script>
+    <script src="./js/globalVars.js"></script>
+
+    <script src="./jsExt/jsTree/jstree.min.js"></script>
+    <script src="./js/treeController.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/infosGenericParams.js"></script>
+    <script src="./js/infosGenericDisplay.js"></script>
+
+    <script src="./js/infosGenericSpecific.js"></script>
+    <script src="./js/infosUseCase.js"></script>
+
+
+    <script>
+        var totalHeight;
+        var totalWidth
+        $(function () {
+
+             totalWidth = $(window).width();
+             totalHeight = $(window).height();
+
+
+            $("#treeContainer").height( totalHeight - 200)
+            messageDivId = "messageSpan";
+
+            $("#treeDialog").dialog({
+                autoOpen: true,
+              height: 500,
+                width: 300,
+                appendTo: "#treeContainer",
+                modal: true,
+
+
+            });
+            $("#treeDialog").dialog("close")
+            $("#treeDialog").css( "z-index",300 )
+
+            var to = false;
+            $('#searchTree').keyup(function () {
+                if (to) {
+                    clearTimeout(to);
+                }
+                to = setTimeout(function () {
+                    var v = $('#searchTree').val();
+                    $('#genericTree').jstree(true).search(v);
+                }, 250);
+            });
+            infoGenericDisplay.clearEntityDiv();
+
+        });
+
+        function onViewSelect(select) {
+
+            infoGenericDisplay.clearEntityDiv();
+            $("#treeHeader").css("visibility", "hidden");
+
+            initUI();
+            dbName = $("#dbName").val();
+            var value = $(select).val();
+            if (value != "")
+                infoGenericDisplay.loadTree(value);
+        }
+        function initUI() {
+
+            $('#genericTree').jstree("destroy").empty();
+            $("#treeContainer").val("");
+        }
+
+    </script>
+
+    <style>
+
+        body {
+            font-family: verdana, sans-serif;
+            font-size: 12px;
+        }
+
+        #treeContainer {
+            width: 500px;
+            overflow: auto;
+
+        }
+
+        #genericTree {
+            width: 500px;
+            overflow: auto;
+
+        }
+
+        .fieldLabel {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        #infosDiv {
+            padding: 20px;
+            border-width: 1px;
+            border-color: #5f3f3f;
+            border-style: groove;
+            margin: 20px;
+
+        }
+
+        #infosHeader {
+            visibility: hidden;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #treeHeader {
+            visibility: hidden;
+
+        }
+
+        .fieldvalue{
+          align-self:left;
+        }
+        #message {
+            font-style: italic;
+        }
+    </style>
+
+</head>
+<body>
+
+
+<table>
+    <tr>
+        <td colspan="2" align="center">
+            Database<input id="dbName" value="POT2017" onchange="initUI()">&nbsp;
+            View <select id="viewSelect" onchange="onViewSelect(this)">
+            <option value="">choose a view..</option>
+            <option>business</option>
+            <option>technology</option>
+            <option>use_case</option>
+            <option>architecture</option>
+            <option>users</option>
+            <option>scenarioXX</option>
+
+
+        </select>
+            &nbsp;
+        </td>
+
+    <tr>
+        <td>
+            <div id="treeHeader">
+                &nbsp;<span id="messageSpan"></span>
+                <br>
+                search <input id="searchTree">
+                <button onclick="treeController.openAll('genericTree')">Open all</button>
+                <button onclick="treeController.closeAll('genericTree')">Close all</button>
+
+
+                <div id="treeContainer">
+                    <div id="genericTree"></div>
+                </div>
+            </div>
+        </td>
+        <td valign="top">
+            <div id="infosHeader">
+                <span id="nodeType"></span>
+                &nbsp;&nbsp;<button onclick="infoGenericDisplay.saveDoc()">save</button>
+                <!--   &nbsp;&nbsp;<button onclick="infoGenericDisplay.deleteDoc()">delete</button>-->
+
+                <div id="infosDiv"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+<div id=treeDialog"></div>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POT import Export</title>
+    <link rel="stylesheet" type="text/css" title="Design" href="./jsExt/jquery/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="./jsExt/jsTree/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" type="text/css" title="Design" href="css/index.css"/>
+
+    <script src="./jsExt/jquery/jquery.min.js"></script>
+    <script src="./jsExt/jquery/jquery-ui.min.js"></script>
+    <script src="./jsExt/others/pako.js"></script>
+    <script src="js/importExport.js"></script>
+    <script src="js/devisuProxy.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/params.js"></script>
+    <script src="js/globalVars.js"></script>
+    <script src="js/pptx.js"></script>
+    <script src="js/users.js"></script>
+
+    <script src="js/d3Graph.js"></script>
+
+    <script src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        var messageDivId = "message";
+
+        $(function () {
+
+            $("#importControls").css("visibility", "hidden");
+            $("#exportCollectionButton").css("visibility", "hidden");
+            util.initDBsSelect(databaseSelect,"POT");
+            util.initDBsSelect(importDBSelect,"POT");
+            ImportExport.initExportCollectionSelect();
+            var xxx = $("#tabs-importExport")
+            $("#tabs-importExport").tabs();
+            var totalWidth = $(window).width();
+            var totalHeight = $(window).height();
+            $(".dataIframe").css("height", totalHeight -50)
+            $(".dataIframe").css("width", totalWidth)
+            $("#graphIframe").css("height", totalHeight -200)
+            $("#graphIframe").css("width", totalWidth-100)
+              var isZip=false;
+
+
+            $("#loginDiv").css("left", (totalWidth / 2) - 150).css("top", (totalHeight / 2) - 150);
+
+            $("#downloadPptxSpan").html(pptx.getPptxSelect())
+
+            if (Gparams.authentify) {
+
+                $("#loginDiv").css("visibility", "visible");
+                $("#login").focus();
+                $("#darkLayerMask").css("width", "100%");
+
+
+
+            }
+
+          //  users.listUsers();
+          //  d3Graph.loadGraphIframe();
+
+
+
+
+
+        })
+
+
+    </script>
+
+    <style>
+        #importJournal{
+            color:#0000cc;
+        }
+
+        #message{
+            margin: 3px;
+            font-style:italic;
+            font-weight: bold;
+        }
+       table {
+            margin: 10px;
+           padding: 10px;
+        }
+
+
+        #graphIframe{
+            width: 100%;
+            height: 800px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<B> POT Data      Database <select on onchange="users.listUsers(); pptx.getPptxSelect()" id="databaseSelect"></select>
+    <img id="waitImg" src="icons/waitAnimated.gif" width="30px" style="visibility: hidden;"><span id="pptxMessage"></span>
+
+</B>
+<div id="tabs-importExport">
+    <ul>
+        <li><a href="#DataTab">Users</a></li>
+      <!--  <li><a href="#GraphTab">Graph</a></li>-->
+        <li><a href="#ExportTab">Export</a></li>
+        <li><a href="#ImportTab">Import</a></li>
+        <li><a href="#SheetsTab">Sheets</a></li>
+
+    </ul>
+    <div id="DataTab">
+      <!--  <iframe class="dataIframe" src="./infosGenericDisplay.html"></iframe>-->
+        <div id="usersListDiv"></div>
+        <div id="userDetailsDiv"></div>
+
+
+    </div>
+    <div id="ExportTab">
+        <table>
+
+            <tr>
+
+              <!--  <td>
+                    Database <select id="databaseSelect">
+
+                </select>-->
+                    Collection <select id="exportCollectionSelect">
+
+                </select>
+
+
+                </td>
+                <td>
+
+                    Export only header<input type="checkbox" id="exportOnlyHeadersCBX">&nbsp;&nbsp;
+                </td>
+                <td>
+                    Output <select id="exportOutputType">
+
+                    <option>csv</option>
+                    <option>screen</option>
+                </select>&nbsp;&nbsp;
+
+                </td>
+                <td>
+                    <button id="exportCollectionButton" onclick="ImportExport.exportCollection()">export</button>
+                </td>
+
+            </tr>
+
+        </table>
+        <hr>
+        <table id="dataTableTable"></table>
+    </div>
+
+    <div id="ImportTab">
+        <table>
+            <tr>
+
+                <td>
+                    choose a target database <select id="importDBSelect">
+                    <option></option>
+                    <option>NEW</option>
+                </select>
+
+                    <hr>
+
+                    <br> Drag you csv file on this zone
+                    <div id="dropZone"
+                         style="width: 150px; height: 150px; opacity: 0.5; background-color: lightblue"></div>
+                </td>
+                <td>
+                    <div id="message"></div>
+
+                    <div id="importControls">
+if items with same name already exist<br>
+                        <input name="importOptionRadio" type="radio"  value="replace"  id="importOptionRadio">replace them
+                        <br> <input name="importOptionRadio" type="radio" value="ignore" id="importOptionRadio">ignore them
+                        <br> <input name="importOptionRadio" type="radio" value="stop" id="importOptionRadio" checked="checked">stop import
+                        <hr>
+                        <button id="clearContentButton" onclick="ImportExport.clearContent()">clear existing content</button>
+                        <hr>
+                        <hr>
+                        <button id="importButton" onclick="ImportExport.importMongo()">import</button>
+                        <hr>
+                        import journal <div id="importJournal"></div>
+                    </div>
+                </td>
+            </tr>
+
+
+        </table>
+
+    </div>
+    <div id="SheetsTab">
+     <!--   Database<input id="pptxDbName" value="POT2017" onchange="initUI()">&nbsp;-->
+        <button onclick="pptx.createAllPOTPowerpoints()">create All Powerpoints</button>
+        download PPTX<span id="downloadPptxSpan"></span>
+
+    </select>
+    </div>
+  <!--  <div id="graphTab">
+
+        <iframe id="graphIframe" src=""></iframe>
+    </div>-->
+</div>
+
+
+    <div id="loginDiv">
+        <div align="center">
+            <p>Login</p>
+            <input id="login" name="login">
+            <p>Password</p>
+            <p>
+                <input id="password0" type="password" name="password">
+            </p>
+            <p>
+                <input type="button" name="OK" value="Ok"
+                       onclick='common.submitPassword("#login","#password0");'>
+
+                <!--<a
+                    href="javascript:common.showChangePassWordDiv(); ">change password</a>-->
+            </p>
+            <p>
+                <br/> <font color="red "></font>
+            </p>
+        </div>
+
+    </div>
+</div>
+<script>
+    var dropZone = document.getElementById('dropZone');
+
+    // Optional.   Show the copy icon when dragging over.  Seems to only work for chrome.
+    dropZone.addEventListener('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+    });
+
+
+
+    // Get file data on drop
+    dropZone.addEventListener('drop', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var files = e.dataTransfer.files; // Array of all files
+
+        for (var i = 0, file; file = files[i]; i++) {
+//if (file.type.match(/image.*/)) {
+            if (ImportExport.acceptFileType(file)) {
+                var reader = new FileReader();
+
+                reader.onload = function (e2) {
+
+                    var result = ImportExport.acceptFileContent(e2.target.result);
+                    if(result.error){
+                        common.setMessage(result.error,"red");
+                        $("#importControls").css("visibility", "hidden");
+                    }
+                    else {
+                        common.setMessage("File recognized :"+result.content.length+" lines in collection "+result.collection ,"green");
+
+                        $("#importControls").css("visibility", "visible");
+                    }
+
+
+                }
+                reader.readAsDataURL(file); // start reading the file data.
+            }
+        }
+    });
+</script>
+<script src="https://cdn.smooch.io/smooch.min.js"></script>
+<script>
+    Smooch.init({appToken: '65hlksymr6wil6a5ubn980eqg'});
+</script>
+</body>
+</html>

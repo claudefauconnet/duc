@@ -1,0 +1,58 @@
+body {
+    font-family: verdana, sans-serif;
+}
+
+#accordionContainer {
+    width: 350px;
+    height: 400px;;
+}
+
+#accordion .ui-accordion-content {
+    width: 100%;
+    max-height: 250px;
+    /*background-color: #f3f3f3;*/
+    color: #777;
+    color: black;
+    font-size: 12px;
+    overflow: auto;
+    line-height: normal;
+    padding: 2px;
+
+
+}
+
+#accordion .ui-accordion-header {
+    font-size: 10pt;
+    line-height: normal;
+//  background-color: grey;
+//    color: brown;
+    font-weight: bold;
+}
+
+
+#idSpan {
+    font-size: 8px;
+}
+.nameRead {
+    font-size: 12px;
+    font-weight: bold;
+    color: #b18527;
+}
+#nameRead {
+    font-size: 12px;
+    font-weight: bold;
+    color: #b18527;
+}
+#technoDCtree{
+    width: 350px;
+    height: 500px;;
+
+}
+.fieldLabel, .mandatoryFieldLabel, .fieldValue{
+    margin :5px;
+    padding :5px;
+}
+.mandatoryFieldLabel{
+    color:darkred;
+    font-weight:bold;
+}

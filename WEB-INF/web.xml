@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>POT2017</display-name>
+  
+  <filter>
+  <filter-name>CorsFilter</filter-name>
+  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>CorsFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+  
+  <!--<filter>
+    <filter-name>SetCacheControl</filter-name>
+    <filter-class>com.fauconnet.devisu.CacheControlFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>SetCacheControl</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>-->
+
+ <!-- <filter>
+    <filter-name>CORS</filter-name>
+    <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+    <init-param>
+      <param-name>cors.allowOrigin</param-name>
+      <param-value>*</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.supportedMethods</param-name>
+      <param-value>GET, POST, HEAD, PUT, DELETE</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.supportedHeaders</param-name>
+      <param-value>Accept, Origin, X-Requested-With, Content-Type, Last-Modified</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.exposedHeaders</param-name>
+      <param-value>Set-Cookie</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.supportsCredentials</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>CORS</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>-->
+  
+  
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <context-param>
+    <param-name>dataManagerType</param-name>
+    <param-value>mongo</param-value>
+  </context-param>
+  <context-param>
+    <param-name>xmlModelFile</param-name>
+    <param-value>POT.xml</param-value>
+  </context-param>
+  
+  <context-param>
+    <param-name>dbHost</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+  <context-param>
+    <param-name>dbPort</param-name>
+    <param-value>27017</param-value>
+  </context-param>
+   <context-param>
+    <param-name>dbUser</param-name>
+    <param-value>devisu</param-value>
+  </context-param>
+  <context-param>
+    <param-name>dbUserWord</param-name>
+    <param-value>pot2duc</param-value>
+  </context-param>
+  
+  
+  
+  
+  
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  
+    <servlet>
+    <description></description>
+    <display-name>DeVisuServlet</display-name>
+    <servlet-name>DeVisuServlet</servlet-name>
+    <servlet-class>com.fauconnet.devisu.DeVisuServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeVisuServlet</servlet-name>
+    <url-pattern>/devisu</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <description></description>
+    <display-name>FileUploadServlet</display-name>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <servlet-class>com.fauconnet.devisu.FileUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <url-pattern>/radarUpload</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>RestServlet</display-name>
+    <servlet-name>RestServlet</servlet-name>
+    <servlet-class>com.fauconnet.rest.RestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RestServlet</servlet-name>
+    <url-pattern>/restapi</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminServlet</display-name>
+    <servlet-name>AdminServlet</servlet-name>
+    <servlet-class>com.fauconnet.etl.AdminServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/adminServlet</url-pattern>
+  </servlet-mapping>
+</web-app>

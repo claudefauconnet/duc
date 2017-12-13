@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" title="Design" href="./jsExt/jquery/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="./jsExt/jsTree/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="./css/infos.css"/>
+
+
+
+
+
+    <style>
+
+        #businessSpan {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #attr_business {
+            color: darkred;
+
+            width: 250px;
+        }
+
+    </style>
+
+
+    <script src="./jsExt/jquery/jquery.min.js"></script>
+    <script src="./jsExt/jquery/jquery-ui.min.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/devisuProxy.js"></script>
+    <script src="js/infosGeneric.js" charset="UTF-8"></script>
+    <script src="js/infosUseCase.js" charset="UTF-8"></script>
+    <script src="js/params.js"></script>
+    <script src="./js/globalVars.js"></script>
+
+    <script src="./jsExt/jsTree/jstree.min.js"></script>
+    <script src="./js/treeController.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/infosGenericParams.js"></script>
+    <script src="./js/radarBackground.js"></script>
+    <script src="./js/infosGenericParams.js"></script>
+    <script src="./js/schema.js"></script>
+    <script src="./js/mongoToNeoSynchronizer.js"></script>
+
+
+    <script>
+        $(function () {
+
+
+        })
+
+    </script>
+
+</head>
+<body>
+<span id="nameRead"></span></br>
+<button onclick="infosUseCase.save()">Save</button>
+<button onclick="infosUseCase.modifyBCs();"> SetBusiness</button>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="idSpan">000000</span>&nbsp;<!--<button  onclick="infosUseCase.deleteUseCase()">Delete</button>-->
+<button onclick=" infosUseCase.delete();">Delete</button>
+<span id="businessSpan"></span>
+<div id="accordionContainer">
+    <div id="accordion">
+
+
+        <h3>Description</h3>
+        <div id="descriptionDiv"></div>
+
+
+        <h3>Attributes</h3>
+        <div id="AttrsSpan"></div>
+
+
+        <h3> Technologies and Digital Capabilities</h3>
+        <div id="DC_technoSpan">
+            <button id="modifyUC_TechnosDCsButton" onclick="infosUseCase.modifyUC_TechnosDCs()">Edit Technologies
+            </button>
+            <button id="modifyUC_TechnosDCsButton" onclick="infosUseCase.modifyUC_TechnosDCs(true)">Edit DC</button>
+            <div id="technoDCtree"></div>
+
+            <!--     <table>
+                     <tr>
+                         <td>Technology <select id="useCaseTechnologiesSelect"
+                                                onchange="infosUseCase.setNewUseCaseDCsAndTechnos()"></select></td>
+                     </tr>
+                     <tr>
+                         <td>
+                             <div id="ulNewDcs">
+
+                             </div>
+                         </td>
+
+                     </tr>
+                     <tr>
+                         <td>
+                             <hr>
+                         </td>
+
+                     </tr>
+                     <tr>
+                         <td>
+                             <div id="oldUseCaseDsAndTechnos">
+                                 <ul id="ulOldDcs"></ul>
+                             </div>
+                         </td>
+
+                     </tr>
+
+
+                 </table>-->
+
+
+        </div>
+
+
+        <!--   <div>
+<h3>Blog</h3>
+
+          <textArea cols='60' rows='20' id="blogSpan"></textArea>
+      </div>
+      -->
+
+
+    </div>
+</div>
+<div id="stateDisplay"></div>
+
+
+</body>
+</html>

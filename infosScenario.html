@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Insert title here</title>
+    <link rel="stylesheet" type="text/css" title="Design" href="./jsExt/jquery/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="./jsExt/jsTree/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="./css/infos.css"/>
+
+   <!-- <style>
+        body {
+            font-family: verdana, sans-serif;
+        }
+
+        #accordionContainer {
+            width: 350px;
+            height: 400px;
+        }
+
+        #accordion .ui-accordion-content {
+            width: 95%;
+            max-height: 140px;
+            /*background-color: #f3f3f3;*/
+            color: #777;
+            color: black;
+            font-size: 12px;
+            overflow: auto;
+            line-height: normal;
+            padding: 2px;
+        }
+
+        #accordion .ui-accordion-header {
+            font-size: 10pt;
+            line-height: normal;
+        //  background-color: grey;
+        //    color: brown;
+            font-weight: bold;
+        }
+
+
+        #idSpan {
+            font-size: 8px;
+        }
+
+        #nameSpan {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>-->
+
+
+    <script src="./jsExt/jquery/jquery.min.js"></script>
+    <script src="./jsExt/jquery/jquery-ui.min.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/devisuProxy.js"></script>
+
+    <script src="js/infosGeneric.js" charset="UTF-8"></script>
+    <script src="./jsExt/jsTree/jstree.min.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="js/params.js"></script>
+    <script src="./js/globalVars.js"></script>
+
+    <script src="./js/infosGenericParams.js"></script>
+    <script src="./js/treeController.js"></script>
+    <script src="./js/radarBackground.js"></script>
+
+
+    <script src="js/infosScenarioRadar.js" charset="UTF-8"></script>
+
+    <script src="./js/schema.js"></script>
+    <script src="./js/mongoToNeoSynchronizer.js"></script>
+</head>
+<body>
+
+<button onclick="infosScenario.save()">Save</button>
+<span id="nameSpan" class="nameRead">----</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="idSpan">000000</span>
+<div id="accordionContainer">
+    <div id="accordion">
+
+        <h3>Description</h3>
+        <div>
+
+            <span id="descSpan"></span>
+          <!--  <table border='0' align="center">
+                <tr valign="top">
+                    <td><span id="imgSpan"></span></td>
+                    <td><span id="descriptionSpan"></span></td>
+                </tr>
+
+            </table>-->
+
+
+
+        </div>
+        <h3>Attributes</h3>
+        <div>
+            <span id="attrsSpan"></span>
+
+
+        </div>
+        <h3>Use Cases</h3>
+        <div>
+            <span id="SC_UCtree"></span>
+        </div>
+
+        <h3>Building Blocks</h3>
+        <div>
+            <span id="BBsSpan"></span>
+            <!--	</div>
+
+                    <h3>Digital Capabilities</h3>
+                <div>
+                    <span id="DCsSpan"></span>
+                </div>-->
+
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

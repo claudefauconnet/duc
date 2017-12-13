@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta charset="utf-8">
+    <title>POT</title>
+
+
+    <link rel="stylesheet" type="text/css" title="Design" href="css/index.css"/>
+    <link rel="stylesheet" media="screen" type="text/css" title="Design" href="./jsExt/jquery/jquery-ui.min.css"/>
+
+
+    <script src="./jsExt/jquery/jquery.min.js"></script>
+    <script src="./jsExt/jquery/jquery-ui.min.js"></script>
+    <script src="./jsExt/jquery/jquery.splitter.js"></script>
+    <script src="./js/common.js"></script>
+    <script src="./js/devisuProxy.js"></script>
+    <script src="./js/params.js"></script>
+    <script src="./js/globalVars.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/treeController.js"></script>
+    <script src="./jsExt/jsTree/jstree.min.js"></script>
+
+
+    <script>
+        var ctrlKeyPressed = false;
+        var queryParams = common.getQueryParams(document.location.search);
+        if (!queryParams.dbName)
+            dbName = "POT" + Gparams.CURRENT_YEAR;
+        dbName = queryParams.dbName;
+
+
+        $(function () {
+            var totalWidth = $(window).width();
+            var totalHeight = $(window).height();
+
+            $("#loginDiv").css("left", (totalWidth / 2) - 150).css("top", (totalHeight / 2) - 150);
+
+
+            if (Gparams.authentify) {
+
+                $("#loginDiv").css("visibility", "visible");
+                $("#login").focus();
+                $("#darkLayerMask").css("width", "100%");
+            }
+            setIframesSrc();
+            $("#tabs").tabs();
+
+
+            //full screen support
+            /*	$(".fullscreen-supported").toggle($(document).fullScreen() !== null);
+             $(".fullscreen-not-supported").toggle($(document).fullScreen() === null);
+
+             $(document).bind("fullscreenchange", function(e) {
+             if (!$(document).fullScreen()) {
+             fullScreen(false);
+             }
+             });
+
+             $(document).bind("fullscreenerror", function(e) {
+             console.log("Full screen error.");
+             //$("#messageDiv").text("Browser won't enter full screen mode for some reason.");
+             });*/
+
+        });
+
+
+        function setIframesSrc() {
+
+            filters = "";
+            for (var key in queryParams) {
+                filters += "&";
+                filters += key;
+                filters += "=" + encodeURIComponent(queryParams[key]);
+            }
+
+            $("#TechnoIframe").attr(
+                "src",
+                "radar.html??dbName=" + dbName
+                + "&radarModelName=Technologies"
+                + filters + "&type=innovative");
+
+            $("#UCiframe").attr(
+                "src",
+                "radar.html?dbName=" + dbName
+                + "&radarModelName=UseCases"
+                + filters);
+
+            $("#SCiframe").attr(
+                "src",
+                "radar.html?dbName=" + dbName
+                + "&radarModelName=ScenariosRadar");
+
+            $("#ScArchiframe").attr(
+                "src",
+                "radar.html?dbName=" + dbName
+                + "&radarModelName=ScenariosArch"
+            );
+            $("#ScArchiframe").attr(
+                "src",
+                "radar.html?dbName=" + dbName
+                + "&radarModelName=ScenariosArch"
+            );
+
+            /*	$("#Graphiframe").attr(
+             "src",
+             "/toutlesens0.9d/?subGraph=POT"
+             );*/
+
+   // $("#tabs").tabs( { disabled: [0,1,2 ,3] } );
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+
+<div id="stateDisplay"></div>
+<div id="tabs">
+    <ul>
+       <li><a href="#home">Home</a></li>
+        <li><a href="#technoRadar"><img src="./icons/techno.png" width="20px">Technologies</a></li>
+        <li><a href="#useCaseRadar"><img src="./icons/useCase.png" width="20px">Use Cases </a></li>
+        <li><a href="#scenarioRadar"><img src="./icons/scenario.png" width="20px">Scenarios </a></li>
+ <li><a href="#scenarioArch"><img src="./icons/scenario.png" width="20px">Scenarios arch. </a></li>
+        <!--<li><a href="#bcsTreeTab"><img src="./icons/BU.png" width="20px">Business </a></li>-->
+        <!--	<li><a href="#graph">Global Graph </a></li>-->
+
+
+    </ul>
+    <div id="home">
+        <!--   <iframe  width="100%" height="600px" src="tagHistory.html" style="overflow: auto"></iframe>-->
+        <iframe width="100%" height="600px" src="home.html"
+                style="overflow: auto"></iframe>
+
+    </div>
+    <div id="technoRadar">
+        <iframe id="TechnoIframe" width="100%" height="600px" src=""
+                style="overflow: auto"></iframe>
+    </div>
+    <div id="useCaseRadar">
+        <iframe id="UCiframe" width="100%" height="600px" src=""
+                style="overflow: auto"></iframe>
+    </div>
+    <div id="scenarioRadar">
+        <iframe id="SCiframe" width="100%" height="600px" src=""
+                style="overflow: auto"></iframe>
+    </div>
+
+    <div id="scenarioArch">
+        <iframe id="ScArchiframe" width="100%" height="600px" src=""
+                style="overflow: auto"></iframe>
+    </div>
+
+    <div id="bcsTreeTab">
+        <div id="bcsTreeDiv">
+            <!--	<iframe name="businessIframe"  src="infosBusiness.html"></iframe>-->
+
+
+        </div>
+    </div>
+</div>
+
+
+<div id="darkLayerMask"></div>
+
+<div id="loginDiv">
+    <div align="center">
+        <p>Login</p>
+        <input id="login" name="login">
+        <p>Password</p>
+        <p>
+            <input id="password0" type="password" name="password">
+        </p>
+        <p>
+            <input type="button" name="OK" value="Ok"
+                   onclick='common.submitPassword("#login","#password0");'>
+
+            <!--<a
+                href="javascript:common.showChangePassWordDiv(); ">change password</a>-->
+        </p>
+        <p>
+            <br/> <font color="red "></font>
+        </p>
+    </div>
+
+</div>
+<div id="changePaswordDiv">
+    <div align="center">
+        <p>Login</p>
+        <input id="login2" name="login2">
+        <p>old Password</p>
+        <p>
+            <input id="passwordOld" type="password" name="password ">
+        </p>
+        <p>new Password</p>
+        <p>
+            <input id="passwordNew1" type="password" name="password ">
+        </p>
+        <p>repeat new Password</p>
+        <p>
+            <input id="passwordNew2" type="password" name="password ">
+        </p>
+        <p>
+            <input type="button" name="OK" value="Ok" onclick="common.changePassword();">
+        </p>
+    </div>
+</div>
+
+<script src="https://cdn.smooch.io/smooch.min.js"></script>
+<script>
+    Smooch.init({appToken: '65hlksymr6wil6a5ubn980eqg'});
+</script>
+</body>
+
+</html>
+
+
+
+
+

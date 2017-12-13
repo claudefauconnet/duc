@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./jsExt/others/jsoneditor.css"/>
+    <script src="./jsExt/jquery/jquery.min.js"></script>
+    <script src="./jsExt/others/jsoneditor.js"></script>
+    <script src="./js/devisuProxy.js"></script>
+    <script src="./js/params.js"></script>
+    <script src="./js/infosGenericParams.js"></script>
+
+    <style>
+        #editor {
+        width:500px;
+        height:500px;
+        }
+    </style>
+</head>
+<body>
+<div id="editor" class="json-editor"></div>
+<pre id="json"></pre>
+
+<script>
+    var json = {
+        "string": "foo",
+        "number": 5,
+        "array": [1, 2, 3],
+        "object": {
+            "property": "value",
+            "subobj": {
+                "arr": ["foo", "ha"],
+                "numero": 1
+            }
+        }
+    };
+
+//  var str=devisuProxy.getTextDoc("./js/infosGenericParams.js");
+    var json=infosGenericParams.fieldModels;
+    $('#editor').jsonEditor(json, { change: function() {
+        $('#json').html(JSON.stringify(json));
+    } });
+</script>
+</html>

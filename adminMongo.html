@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+
+<link rel="stylesheet" media="screen" href="./jsExt/jquery/jquery-ui.min.css">
+<link rel="stylesheet" media="screen" href="./jsExt/others/jquery.datatables.min.css">
+<script src="./jsExt/jquery/jquery.min.js"></script>
+<script src="./jsExt/jquery/jquery-ui.min.js"></script>
+<script src="./jsExt/others/jquery.datatables.min.js"></script>
+<script src="./js/params.js"></script>
+<script src="./js/devisuProxy.js"></script>
+<script src="./js/common.js"></script>	
+<script src="./js/adminMongo.js"></script>
+	<script src="./js/globalVars.js"></script>
+
+
+
+
+
+<style>
+#tableContainer {
+	width: 100%;
+	height: 600px;
+	overflow: auto;
+}
+
+#resultTextArea {
+	width: 100%;
+	height: 600px;
+	overflow: auto;
+	font-family: arial;
+	font-size: 14;
+	font-weight: normal;
+	color: black;
+}
+
+#csvDiv, #spreadsheetDiv {
+	width: 100%;
+	height: 600px;
+	overflow: auto;
+    font-size: 12px;
+}
+
+input, textarea,select  {
+	font-family: arial;
+	font-size: 14px;
+	font-weight: bold;
+	color: blue;
+}
+</style>
+
+<script>
+	$(document).ready(function() {
+		
+		//    $('#resultTable').DataTable();
+	
+		
+	});
+</script>
+</head>
+
+<body>
+	<span id="stateDisplay"></span>
+	<table border="0">
+		<tr>
+			<td>DB <select id="dbSelect" onchange='$("#dbName").val($("#dbSelect").val());initCollections();'>
+					<option>&nbsp;</option>
+			</select> <input id="dbName" >
+			queries <select id="qHistory" onchange="selectQuery();">
+					<option>&nbsp;</option>
+			</select>
+				<button onclick="loadQueries();">load</button>
+				<button onclick="saveQueries();">save</button>
+			</td>
+
+		</tr>
+		
+		
+
+		<tr>
+			<td>collection <select id="collSelect" onchange='$("#collectionName").val($("#collSelect").val());'>
+					<option>&nbsp;</option>
+			</select> <input id="collectionName">
+				<button onclick="executeAction('get');">show</button>
+				<button onclick="exportCSV();">get CSV</button> <input id="csvSep" value=";" size="3">
+				<button onclick="executeScript();">execute script</button> <input type="checkbox" id="colHeader" checked="checked" />withColHeader
+
+			</td>
+		</tr>
+		<tr>
+			<td>fields 
+			<select id="fieldNamesSelect" onchange="fillFieldsInput(this)"></select>
+			<input id="fields" size="50" value="">
+			</td>
+
+		</tr>
+		<tr>
+			<td>request <textarea id="jsonStr" cols="50" rows="3">{  }</textarea>
+			</td>
+
+		</tr>
+		<tr>
+		<td>
+		<div id="tableContainer">
+			<table id="resultTable"></table>
+			</div>
+			</td>
+			</tr>
+		
+		
+	</table>
+	
+
+</body>
+</html>
